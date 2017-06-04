@@ -8,7 +8,7 @@ public class EnemySpawner : MonoBehaviour {
 	public float height = 5f;
 	public float speed = 5f;
 		
-	private bool isLeft = true;	
+	private bool moveLeft = true;	
 	private MovementController movementController;
 
 	void Start () {	
@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour {
 	
 	void Update()
 	{	
-		if (isLeft)
+		if (moveLeft)
 		{
 			movementController.MoveLeft();	
 		}
@@ -40,10 +40,13 @@ public class EnemySpawner : MonoBehaviour {
 	
 	void SwitchDirectionWhenEndReached()
 	{
-		if (transform.position.x <= movementController.MinX || 
-			transform.position.x >= movementController.MaxX)
+		if (transform.position.x <= movementController.MinX)
 		{
-			isLeft = !isLeft;
-		}	
+			moveLeft = false;
+		}
+		else if (transform.position.x >= movementController.MaxX)
+		{
+			moveLeft = true;
+		}
 	}
 }
