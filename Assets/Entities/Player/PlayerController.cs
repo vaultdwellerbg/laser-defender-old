@@ -8,32 +8,21 @@ public class PlayerController : MonoBehaviour {
 	
 	private float minX;
 	private float maxX;
+	private MovementController movementController;
 
 	void Start () {
-		float planeDistance = transform.position.z - Camera.main.transform.position.z;
-		Vector3 leftmost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, planeDistance));
-		Vector3 rightmost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, planeDistance));
-		minX = leftmost.x + padding;
-		maxX = rightmost.x - padding;
+		movementController = new MovementController(transform, padding, speed);		
 	}
 	
 	void Update () {
 			
 		if(Input.GetKey(KeyCode.LeftArrow))
 		{
-			transform.position += Vector3.left * speed * Time.deltaTime;
+			movementController.MoveLeft();
 		}
 		else if (Input.GetKey(KeyCode.RightArrow))
 		{
-			transform.position += Vector3.right * speed * Time.deltaTime;
+			movementController.MoveRight();
 		}
-		
-		RestrictShipPosition();
-	}
-	
-	void RestrictShipPosition()
-	{
-		float clampedX = Mathf.Clamp(transform.position.x, minX, maxX);
-		transform.position = new Vector3(clampedX, transform.position.y);		
 	}
 }
