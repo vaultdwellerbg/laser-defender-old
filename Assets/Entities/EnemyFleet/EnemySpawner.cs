@@ -12,12 +12,16 @@ public class EnemySpawner : MonoBehaviour {
 	private MovementController movementController;
 
 	void Start () {	
-		movementController = new MovementController(transform, width / 2, speed);	
+		movementController = new MovementController(transform, width / 2, speed);
+		SpawnEnemies();
+	}
 	
+	void SpawnEnemies()
+	{
 		foreach (Transform child in transform) {
 			GameObject enemy = Instantiate(enemyPrefab, child.position, Quaternion.identity) as GameObject;
 			enemy.transform.parent = child;			
-		}
+		}		
 	}
 	
 	void OnDrawGizmos()
@@ -27,6 +31,16 @@ public class EnemySpawner : MonoBehaviour {
 	
 	void Update()
 	{	
+		MoveEnemies();
+		SwitchDirectionWhenEdgeReached();	
+		if (AllEnemiesDestroyed())
+		{
+			SpawnEnemies();
+		}
+	}
+	
+	void MoveEnemies()
+	{
 		if (moveLeft)
 		{
 			movementController.MoveLeft();	
@@ -34,11 +48,10 @@ public class EnemySpawner : MonoBehaviour {
 		else
 		{
 			movementController.MoveRight();
-		}
-		SwitchDirectionWhenEndReached();
+		}		
 	}
 	
-	void SwitchDirectionWhenEndReached()
+	void SwitchDirectionWhenEdgeReached()
 	{
 		if (transform.position.x <= movementController.MinX)
 		{
@@ -48,5 +61,13 @@ public class EnemySpawner : MonoBehaviour {
 		{
 			moveLeft = true;
 		}
+	}
+	
+	bool AllEnemiesDestroyed()
+	{
+		foreach (Transform positionChild in transform) {
+			if(positionChild.childCount > 0) return false;
+		}
+		return true;
 	}
 }
