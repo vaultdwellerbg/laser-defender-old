@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public GameObject laserPrefab;
 	public float shootingSpeed;
 	public float shootingRate = 0.2f;
+	public float health = 300f;
 	
 	private float minX;
 	private float maxX;
@@ -51,4 +52,23 @@ public class PlayerController : MonoBehaviour {
 		GameObject laser = Instantiate(laserPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
 		laser.rigidbody2D.velocity = new Vector3(0, shootingSpeed);		
 	}
+	
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		Projectile projectile = col.gameObject.GetComponent<Projectile>();
+		if (projectile != null)
+		{
+			TakeDamage(projectile.Damage);
+			projectile.Hit();
+		}
+	}
+	
+	void TakeDamage(float damage)
+	{
+		health -= damage;
+		if (health <= 0)
+		{
+			Destroy(gameObject);
+		}		
+	}	
 }
