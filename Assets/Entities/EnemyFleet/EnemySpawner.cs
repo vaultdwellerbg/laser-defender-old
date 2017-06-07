@@ -7,22 +7,39 @@ public class EnemySpawner : MonoBehaviour {
 	public float width = 10f;
 	public float height = 5f;
 	public float speed = 5f;
+	public float spawnDelay = 0.5f;
 		
 	private bool moveLeft = true;	
 	private MovementController movementController;
 
 	void Start () {	
 		movementController = new MovementController(transform, width / 2, speed);
-		SpawnEnemies();
+		SpawnUntilFull();
 	}
 	
-	void SpawnEnemies()
+	void SpawnUntilFull()
 	{
-		foreach (Transform child in transform) {
-			GameObject enemy = Instantiate(enemyPrefab, child.position, Quaternion.identity) as GameObject;
-			enemy.transform.parent = child;			
-		}		
+		Transform freePosition = NextFreePosition();
+		if (freePosition)
+		{
+			SpawnEnemy(freePosition);
+			Invoke("SpawnUntilFull", spawnDelay);
+		}
 	}
+	
+	void SpawnEnemy(Transform position)
+	{
+		GameObject enemy = Instantiate(enemyPrefab, position.position, Quaternion.identity) as GameObject;
+		enemy.transform.parent = position;			
+	}
+	
+	Transform NextFreePosition()
+	{
+		foreach (Transform positionChild in transform) {
+			if(positionChild.childCount == 0) return positionChild;
+		}
+		return null;		
+	}	
 	
 	void OnDrawGizmos()
 	{
@@ -35,7 +52,7 @@ public class EnemySpawner : MonoBehaviour {
 		SwitchDirectionWhenEdgeReached();	
 		if (AllEnemiesDestroyed())
 		{
-			SpawnEnemies();
+			SpawnUntilFull();
 		}
 	}
 	
