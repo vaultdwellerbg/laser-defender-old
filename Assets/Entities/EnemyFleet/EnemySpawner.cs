@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour {
 	private MovementController movementController;
 
 	void Start () {	
+		return;
 		movementController = new MovementController(transform, width / 2, speed);
 		SpawnUntilFull();
 	}
@@ -48,7 +49,7 @@ public class EnemySpawner : MonoBehaviour {
 	
 	void Update()
 	{	
-		MoveEnemies();
+		return;
 		SwitchDirectionWhenEdgeReached();	
 		if (AllEnemiesDestroyed())
 		{
