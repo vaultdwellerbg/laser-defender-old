@@ -7,6 +7,14 @@ public class EnemyController : MonoBehaviour {
 	public GameObject laserPrefab;
 	public float shootingSpeed;
 	public float shotsPerSecond = 0.5f;
+	public int pointsReward = 150;
+	
+	private ScoreKeeper scoreKeeper; 
+
+	void Start()
+	{
+		scoreKeeper = GameObject.FindObjectOfType<ScoreKeeper>();
+	}
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
@@ -23,6 +31,7 @@ public class EnemyController : MonoBehaviour {
 		health -= damage;
 		if (health <= 0)
 		{
+			scoreKeeper.Score(pointsReward);
 			Destroy(gameObject);
 		}		
 	}
