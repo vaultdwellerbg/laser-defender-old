@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour {
 	public float shootingSpeed;
 	public float shotsPerSecond = 0.5f;
 	public int pointsReward = 150;
+	public AudioClip explosionSound;
 	
 	private ScoreKeeper scoreKeeper; 
 
@@ -31,9 +32,15 @@ public class EnemyController : MonoBehaviour {
 		health -= damage;
 		if (health <= 0)
 		{
-			scoreKeeper.Score(pointsReward);
-			Destroy(gameObject);
+			Explode();
 		}		
+	}
+	
+	void Explode()
+	{
+		scoreKeeper.Score(pointsReward);
+		Destroy(gameObject);
+		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);		
 	}
 	
 	void Update()
@@ -48,6 +55,7 @@ public class EnemyController : MonoBehaviour {
 	void Shoot()
 	{
 		GameObject laser = Instantiate(laserPrefab, transform.position + Vector3.down * 0.5f, Quaternion.identity) as GameObject;
-		laser.rigidbody2D.velocity = new Vector3(0, -shootingSpeed);		
+		laser.rigidbody2D.velocity = new Vector3(0, -shootingSpeed);
+		audio.Play();	
 	}
 }
