@@ -14,9 +14,11 @@ public class PlayerController : MonoBehaviour {
 	private float minX;
 	private float maxX;
 	private MovementController movementController;
+	private LevelManager levelManager;
 
 	void Start () {
-		movementController = new MovementController(transform, padding, speed);		
+		movementController = new MovementController(transform, padding, speed);
+		levelManager = GameObject.FindObjectOfType<LevelManager>();
 	}
 	
 	void Update () {
@@ -76,7 +78,14 @@ public class PlayerController : MonoBehaviour {
 	
 	void Explode()
 	{
-		Destroy(gameObject);
-		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);		
+	 	GetComponent<SpriteRenderer>().sprite = null;
+		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);
+		Invoke("EndGame", 3f);
+		Destroy(gameObject, 3.1f);		
+	}
+	
+	void EndGame()
+	{
+		levelManager.LoadLevel("End");
 	}
 }
