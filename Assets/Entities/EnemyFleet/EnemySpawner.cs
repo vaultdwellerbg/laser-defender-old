@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour {
 	public float height = 5f;
 	public float speed = 5f;
 	public float spawnDelay = 0.5f;
+	public bool ready = false;
 		
 	private bool moveLeft = true;	
 	private MovementController movementController;
@@ -24,6 +25,10 @@ public class EnemySpawner : MonoBehaviour {
 		{
 			SpawnEnemy(freePosition);
 			Invoke("SpawnUntilFull", spawnDelay);
+		}
+		else
+		{
+			ready = true;
 		}
 	}
 	
@@ -52,6 +57,7 @@ public class EnemySpawner : MonoBehaviour {
 		SwitchDirectionWhenEdgeReached();	
 		if (AllEnemiesDestroyed())
 		{
+			ready = false;
 			SpawnUntilFull();
 		}
 	}

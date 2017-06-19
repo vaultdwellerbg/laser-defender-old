@@ -10,11 +10,14 @@ public class EnemyController : MonoBehaviour {
 	public int pointsReward = 150;
 	public AudioClip explosionSound;
 	
-	private ScoreKeeper scoreKeeper; 
+	private ScoreKeeper scoreKeeper;
+	private EnemySpawner enemySpawner; 
+	private bool ready = false;
 
 	void Start()
 	{
 		scoreKeeper = GameObject.FindObjectOfType<ScoreKeeper>();
+		enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
 	}
 
 	void OnTriggerEnter2D(Collider2D col)
@@ -45,11 +48,21 @@ public class EnemyController : MonoBehaviour {
 	
 	void Update()
 	{
+		if (enemySpawner.ready)
+		{
+			Invoke("SetReady", 1);
+		}
+	
 		float probability = shotsPerSecond * Time.deltaTime;
-		if (Random.value < probability)
+		if (Random.value < probability && ready)
 		{
 			Shoot();
 		}
+	}
+	
+	void SetReady() 
+	{
+		ready = true;
 	}
 	
 	void Shoot()

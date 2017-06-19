@@ -15,15 +15,24 @@ public class PlayerController : MonoBehaviour {
 	private float maxX;
 	private MovementController movementController;
 	private LevelManager levelManager;
+	private EnemySpawner enemySpawner; 
 
 	void Start () {
 		movementController = new MovementController(transform, padding, speed);
 		levelManager = GameObject.FindObjectOfType<LevelManager>();
+		enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
 	}
 	
 	void Update () {
-		WaitForMovementInput();
-		WaitForShootingInput();
+		if (enemySpawner.ready)
+		{
+			WaitForMovementInput();
+			WaitForShootingInput();			
+		}
+		else
+		{
+			CancelInvoke("Shoot");
+		}
 	}
 	
 	void WaitForMovementInput()
