@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour {
 		else
 		{
 			CancelInvoke("Shoot");
+			CenterPosition();
 		}
 	}
 	
@@ -64,6 +65,12 @@ public class PlayerController : MonoBehaviour {
 		GameObject laser = Instantiate(laserPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
 		laser.rigidbody2D.velocity = new Vector3(0, shootingSpeed);
 		audio.Play();
+	}
+	
+	void CenterPosition()
+	{
+		float centerX = (movementController.MinX + movementController.MaxX) / 2;
+		transform.position = new Vector3(centerX, transform.position.y);
 	}
 	
 	void OnTriggerEnter2D(Collider2D col)
