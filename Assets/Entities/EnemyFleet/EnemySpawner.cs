@@ -12,9 +12,12 @@ public class EnemySpawner : MonoBehaviour {
 		
 	private bool moveLeft = true;	
 	private MovementController movementController;
+	private WavesKeeper wavesKeeper;
 
 	void Start () {	
 		movementController = new MovementController(transform, width / 2, speed);
+		wavesKeeper = GameObject.FindObjectOfType<WavesKeeper>();
+		wavesKeeper.Raise();
 		SpawnUntilFull();
 	}
 	
@@ -58,6 +61,7 @@ public class EnemySpawner : MonoBehaviour {
 		if (AllEnemiesDestroyed())
 		{
 			ready = false;
+			wavesKeeper.Raise();
 			SpawnUntilFull();
 		}
 	}
