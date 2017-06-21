@@ -25,6 +25,6 @@ public class ScoreKeeper : MonoBehaviour {
 	
 	void UpdateScoreUI()
 	{
-		scoreUI.text = "Score: " + score;
+		scoreUI.text = "Score " + score;
 	}
 }
