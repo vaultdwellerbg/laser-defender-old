@@ -22,13 +22,13 @@ public class EnemySpawner : MonoBehaviour {
 	void Start () {	
 		movementController = new MovementController(transform, width / 2, speed);
 		wavesKeeper = GameObject.FindObjectOfType<WavesKeeper>();
-		wavesKeeper.Raise();	
+		wavesKeeper.Raise();
+		InitFreePositions();	
 		SpawnUntilFull();
 	}
 	
 	void SpawnUntilFull()
 	{
-		InitFreePositions();
 		Transform freePosition = NextFreePosition();
 		if (freePosition)
 		{
@@ -45,9 +45,14 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		freePositions = new List<Transform>();
 		int maxEnemyCount = GetMaxEnemyCount();
-		for (int i = 0; i < maxEnemyCount; i++) {
-			freePositions.Add(transform.GetChild(i));
-		}		
+		List<int> usedIndices = new List<int>();
+		for (int i = 0; i < maxEnemyCount; i++) {			
+			int randomPositionIndex = Random.Range(0, transform.childCount - 1);
+			if(!usedIndices.Contains(randomPositionIndex))
+			{
+				freePositions.Add(transform.GetChild(randomPositionIndex));
+			}
+		}	
 	}
 	
 	int GetMaxEnemyCount()
@@ -83,6 +88,7 @@ public class EnemySpawner : MonoBehaviour {
 		{
 			ready = false;
 			wavesKeeper.Raise();
+			InitFreePositions();	
 			SpawnUntilFull();
 		}
 	}
