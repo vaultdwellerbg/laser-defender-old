@@ -44,14 +44,10 @@ public class EnemySpawner : MonoBehaviour {
 	void InitFreePositions()
 	{
 		freePositions = new List<Transform>();
-		int maxEnemyCount = GetMaxEnemyCount();
 		List<int> usedIndices = new List<int>();
+		int maxEnemyCount = GetMaxEnemyCount();	
 		for (int i = 0; i < maxEnemyCount; i++) {			
-			int randomPositionIndex = Random.Range(0, transform.childCount - 1);
-			if(!usedIndices.Contains(randomPositionIndex))
-			{
-				freePositions.Add(transform.GetChild(randomPositionIndex));
-			}
+			freePositions.Add(GetRandomPosition(usedIndices));
 		}	
 	}
 	
@@ -59,6 +55,27 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		int count = MIN_ENEMY_COUNT + WavesKeeper.count / ENEMY_COUNT_PROGRESSION_RATE;
 		return Mathf.Clamp(count, 0, transform.childCount);		
+	}	
+
+	Transform GetRandomPosition (List<int> usedIndices)
+	{
+		int randomPositionIndex = GetRandomUnusedIndex (usedIndices);
+		Debug.Log(randomPositionIndex);
+		return transform.GetChild(randomPositionIndex);
+	}
+	
+	int GetRandomUnusedIndex(List<int> usedIndices)
+	{
+		int randomPositionIndex = Random.Range(0, transform.childCount - 1);
+		if(usedIndices.Contains(randomPositionIndex))
+		{
+			return GetRandomUnusedIndex(usedIndices);
+		}
+		else
+		{
+			usedIndices.Add(randomPositionIndex);
+			return randomPositionIndex;
+		}
 	}
 	
 	Transform NextFreePosition()
