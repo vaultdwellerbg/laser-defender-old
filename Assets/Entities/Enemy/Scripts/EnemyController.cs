@@ -41,6 +41,7 @@ public class EnemyController : MonoBehaviour {
 	
 	void Explode()
 	{
+		ready = false;
 		scoreKeeper.Score(pointsReward);
 		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);	
 		GetComponent<Animator>().Play("Explosion");

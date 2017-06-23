@@ -25,7 +25,10 @@ public class MusicPlayer : MonoBehaviour {
 	
 	void PlayClip(int index)
 	{
-		music.Stop();
+		if (index > 0)
+		{
+			music.Stop();
+		}
 		music.clip = audioClips[index];		
 		music.Play();		
 	}	

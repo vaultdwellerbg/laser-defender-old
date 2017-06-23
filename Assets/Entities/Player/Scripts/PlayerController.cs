@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour {
 	void RegisterHit(Collider2D col)
 	{
 		Projectile projectile = col.gameObject.GetComponent<Projectile>();
-		if (projectile != null && health > 0)
+		if (projectile != null && health > 0 && enemySpawner.ready)
 		{
 			TakeDamage(projectile.Damage);
 			projectile.Hit();
