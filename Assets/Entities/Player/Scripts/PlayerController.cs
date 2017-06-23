@@ -16,22 +16,20 @@ public class PlayerController : MonoBehaviour {
 	private MovementController movementController;
 	private LevelManager levelManager;
 	private EnemySpawner enemySpawner; 
-	private bool isShotDown;
 
 	void Start () {
 		movementController = new MovementController(transform, padding, speed);
 		levelManager = GameObject.FindObjectOfType<LevelManager>();
 		enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
-		isShotDown = false;
 	}
 	
 	void Update () {
-		if (enemySpawner.ready)
+		if (enemySpawner.ready && health > 0)
 		{
 			WaitForMovementInput();
 			WaitForShootingInput();			
 		}
-		else
+		else if (!enemySpawner.ready)
 		{
 			CancelInvoke("Shoot");
 			CenterPosition();
@@ -77,14 +75,13 @@ public class PlayerController : MonoBehaviour {
 	
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		if (isShotDown) return;	
 		RegisterHit(col);
 	}
 	
 	void RegisterHit(Collider2D col)
 	{
 		Projectile projectile = col.gameObject.GetComponent<Projectile>();
-		if (projectile != null)
+		if (projectile != null && health > 0)
 		{
 			TakeDamage(projectile.Damage);
 			projectile.Hit();
@@ -102,11 +99,11 @@ public class PlayerController : MonoBehaviour {
 	
 	void Explode()
 	{
-		isShotDown = true;
 	 	GetComponent<SpriteRenderer>().sprite = null;
 		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);
-		Invoke("EndGame", 3f);
-		Destroy(gameObject, 3.1f);		
+		GetComponent<Animator>().Play("Explosion");
+		Invoke("EndGame", 1f);
+		Destroy(gameObject, 1.1f);		
 	}
 	
 	void EndGame()

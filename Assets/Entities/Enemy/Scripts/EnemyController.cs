@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col)
 	{
 		Projectile projectile = col.gameObject.GetComponent<Projectile>();
-		if (projectile != null)
+		if (projectile != null && health > 0)
 		{		
 			TakeDamage(projectile.Damage);
 			projectile.Hit();			
@@ -42,8 +42,14 @@ public class EnemyController : MonoBehaviour {
 	void Explode()
 	{
 		scoreKeeper.Score(pointsReward);
+		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);	
+		GetComponent<Animator>().Play("Explosion");
+		Invoke("DestroyEnemy", 1);
+	}
+	
+	void DestroyEnemy()
+	{
 		Destroy(gameObject);
-		AudioSource.PlayClipAtPoint(explosionSound, transform.position, 0.5f);		
 	}
 	
 	void Update()
